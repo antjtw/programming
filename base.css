@@ -1,0 +1,142 @@
+/* ============================================================
+   base.css — reset, responsive shell, typography
+   ============================================================ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+html{color-scheme:dark light}
+body{
+  font-family:var(--display);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  transition:background .25s ease, color .25s ease;
+}
+a{color:var(--accent);text-decoration:none}
+button{font-family:inherit}
+
+/* ---------- responsive app shell ---------- */
+.app{position:relative;min-height:100dvh;display:flex;flex-direction:column}
+
+/* faint grid texture behind everything */
+.app::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:34px 34px;opacity:.10;
+  -webkit-mask-image:radial-gradient(120% 60% at 50% 0%, #000 0%, transparent 72%);
+  mask-image:radial-gradient(120% 60% at 50% 0%, #000 0%, transparent 72%);
+}
+
+.sidebar{display:none}
+.main{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* top bar (mobile + tablet) */
+.topbar{
+  position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line);min-height:56px;
+}
+.backbtn{
+  flex:none;width:34px;height:34px;border-radius:10px;border:1px solid var(--line-2);
+  background:var(--card-2);color:var(--ink);font-size:18px;display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.backbtn:active{transform:scale(.92)}
+.brand-m{font-weight:900;font-size:18px;color:var(--accent)}
+.tb-text{flex:1;min-width:0}
+.crumb{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crumb b{color:var(--accent-2)}
+.tb-title{font-weight:900;font-size:15px;letter-spacing:.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.theme-btn-m{
+  flex:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--line-2);
+  background:var(--card-2);color:var(--ink);font-size:15px;cursor:pointer;transition:.15s;
+}
+.theme-btn-m:active{transform:scale(.9)}
+
+/* content area */
+.view{flex:1;position:relative;z-index:1;padding:18px 16px 116px}
+.view>*{max-width:var(--content);margin-inline:auto}
+
+/* bottom tab bar (mobile + tablet) */
+.tabbar{
+  position:sticky;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(3,1fr);
+  background:color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter:blur(12px);border-top:1px solid var(--line);
+  padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));
+}
+.tab-link{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0;color:var(--ink-faint);border-radius:12px;transition:.15s}
+.tab-link .jp{font-weight:900;font-size:17px;line-height:1}
+.tab-link .en{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.tab-link.on{color:var(--accent)}
+.tab-link:active{transform:scale(.94)}
+
+/* ---------- desktop: sidebar layout ---------- */
+@media (min-width:1000px){
+  .app{display:grid;grid-template-columns:272px 1fr;align-items:start}
+  .app::before{mask-image:none;-webkit-mask-image:none;opacity:.05}
+  .sidebar{
+    display:flex;flex-direction:column;position:sticky;top:0;height:100dvh;
+    padding:26px 20px;border-right:1px solid var(--line);background:var(--bg-2);z-index:20;
+  }
+  .brand{font-weight:900;font-size:30px;color:var(--accent);line-height:1;display:flex;flex-direction:column;gap:6px}
+  .brand small{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase}
+  .side-nav{display:flex;flex-direction:column;gap:4px;margin-top:34px}
+  .side-link{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;color:var(--ink-dim);border:1px solid transparent;transition:.15s}
+  .side-link .jp{font-weight:900;font-size:18px;width:24px;text-align:center}
+  .side-link .en{font-size:14px;font-weight:500}
+  .side-link:hover{background:var(--card);color:var(--ink)}
+  .side-link.on{background:var(--card);color:var(--accent);border-color:var(--line-2)}
+  .side-foot{margin-top:auto;display:flex;flex-direction:column;gap:14px}
+  .theme-btn{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-dim);cursor:pointer;font-size:13px;transition:.15s}
+  .theme-btn:hover{color:var(--ink)}
+  .theme-btn .g{font-size:15px}
+  .side-card{border:1px solid var(--danger-line);background:var(--danger-soft);border-radius:14px;padding:12px}
+  .side-card .sc-t{display:flex;align-items:center;gap:7px;font-weight:700;font-size:12px;color:var(--danger-ink)}
+  .side-card .sc-t .dot{width:8px;height:8px;border-radius:50%;background:var(--danger)}
+  .side-card .sc-x{font-size:11.5px;line-height:1.5;color:var(--danger-ink);margin-top:6px;opacity:.92}
+
+  .topbar{display:none}
+  .tabbar{display:none}
+  .view{padding:34px 40px 60px}
+  .view>*{max-width:var(--maxw);margin-inline:0}
+}
+
+/* ---------- typography ---------- */
+.hero{margin-bottom:4px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin-bottom:8px}
+.jp-huge{font-weight:900;font-size:46px;line-height:.96;letter-spacing:-.01em}
+.hero-sub{font-size:20px;color:var(--ink-faint);font-weight:700;margin-left:10px}
+.h1{font-weight:900;font-size:27px;line-height:1.05;letter-spacing:-.01em}
+.h2{font-weight:900;font-size:19px;letter-spacing:.01em}
+.title-jp{display:flex;align-items:baseline;gap:10px}
+.title-jp .tj{color:var(--accent);font-size:30px}
+.sub{color:var(--ink-dim);font-size:14px}
+.lead{color:var(--ink-dim);font-size:14.5px;line-height:1.6}
+.targets{color:var(--ink-dim);font-size:13.5px;line-height:1.6}
+
+@media (min-width:1000px){
+  .jp-huge{font-size:62px}
+  .h1{font-size:34px}
+  .lead{font-size:16px;max-width:680px}
+  .hero{margin-bottom:8px}
+}
+
+/* spacing utilities */
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt24{margin-top:24px}
+.tcenter{text-align:center}
+
+/* motion */
+.fade{animation:fade .4s cubic-bezier(.2,.7,.2,1) both}
+.stagger>*{animation:up .5s cubic-bezier(.2,.7,.2,1) both}
+.stagger>*:nth-child(1){animation-delay:.02s}
+.stagger>*:nth-child(2){animation-delay:.06s}
+.stagger>*:nth-child(3){animation-delay:.10s}
+.stagger>*:nth-child(4){animation-delay:.14s}
+.stagger>*:nth-child(5){animation-delay:.18s}
+.stagger>*:nth-child(6){animation-delay:.22s}
+.stagger>*:nth-child(7){animation-delay:.26s}
+.stagger>*:nth-child(n+8){animation-delay:.30s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fade,.stagger>*{animation:none}}

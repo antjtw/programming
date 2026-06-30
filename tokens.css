@@ -1,0 +1,83 @@
+/* ============================================================
+   tokens.css — design tokens
+   Dark is the base (:root). Light applied via [data-theme="light"].
+   The inline bootstrap in each page sets data-theme before paint.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  /* type */
+  --display:'Zen Kaku Gothic New','Hiragino Kaku Gothic ProN','Yu Gothic','Noto Sans JP',sans-serif;
+  --mono:'JetBrains Mono','SFMono-Regular',ui-monospace,monospace;
+  --maxw:1180px;
+  --content:780px;
+
+  /* dark palette (default) */
+  --bg:#0B0D10;
+  --bg-2:#0F1217;
+  --card:#14181E;
+  --card-2:#1A1F27;
+  --card-3:#222834;
+  --line:#262C36;
+  --line-2:#333A47;
+  --ink:#E9EDF3;
+  --ink-dim:#9AA3B0;
+  --ink-faint:#5E6675;
+  --accent:#5B9DFF;
+  --accent-2:#3D7DEB;
+  --accent-ink:#06101F;
+  --accent-soft:#0f1a2e;
+  --accent-softline:#1c3a63;
+  --accent-softink:#bcd6ff;
+  --accent-ring:#5b9dff33;
+  --teal:#3CC8D6;
+  --teal-soft:#0c1c1e;
+  --teal-line:#1d4448;
+  --teal-ink:#bfeef2;
+  --warn:#F2B43D;
+  --warn-line:#6b5a2c;
+  --danger:#FF6150;
+  --danger-soft:#241313;
+  --danger-line:#5a2a23;
+  --danger-ink:#ffcfc7;
+  --danger-strong:#fff;
+  --ok:#54D391;
+  --wm:#ffffff08;            /* big watermark glyphs */
+  --glow:#11161f;            /* hero radial glow */
+  --shadow:0 1px 0 rgba(255,255,255,.02), 0 18px 40px -24px rgba(0,0,0,.7);
+}
+
+:root[data-theme="light"]{
+  --bg:#EDF0F4;
+  --bg-2:#E4E9EF;
+  --card:#FFFFFF;
+  --card-2:#F4F6FA;
+  --card-3:#E9EEF4;
+  --line:#DCE2EA;
+  --line-2:#C6CEDA;
+  --ink:#141A22;
+  --ink-dim:#566173;
+  --ink-faint:#8A93A3;
+  --accent:#2E6FD6;
+  --accent-2:#1E58BE;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#EAF1FD;
+  --accent-softline:#C7DBF7;
+  --accent-softink:#1B4FA0;
+  --accent-ring:#2e6fd633;
+  --teal:#0E8C9A;
+  --teal-soft:#E5F6F8;
+  --teal-line:#BBE5EA;
+  --teal-ink:#0A5660;
+  --warn:#A9711A;
+  --warn-line:#E6CFA0;
+  --danger:#D23B2C;
+  --danger-soft:#FCEBE9;
+  --danger-line:#F1C5BF;
+  --danger-ink:#8A2018;
+  --danger-strong:#7A1A12;
+  --ok:#1E9E63;
+  --wm:#0b1b3608;
+  --glow:#ffffff;
+  --shadow:0 1px 0 rgba(255,255,255,.6), 0 14px 34px -22px rgba(20,40,80,.28);
+}
