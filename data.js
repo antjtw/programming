@@ -313,6 +313,185 @@ function repWeeks(w1, n, prog){
   return out;
 }
 
+/* ===== Detailed later-meso builder =====
+   Fixed movements per meso; loads/reps/RPE progress across weeks (deload = last week).
+   genMeso() expands canonical sessions into fully-populated weeks. */
+const _w = (s,r,k)=>({s,r,k});                                   // a main lift's week prescription
+const _mm = (n,v,q,nt,flag,wk)=>({n,v,yt:q?yt(q):null,nt:nt||"",flag:flag||undefined,wk});   // main movement
+const _ac = (n,sets,reps,r,nt,q,flag,k)=>({n,sets,reps,r,nt:nt||"",yt:q?yt(q):null,flag:flag||undefined,k:k||undefined}); // accessory
+
+/* warm-up templates by day type — static every week, corrective work threaded in */
+const WU = {
+  squat:[
+    M("Bike or row — easy","warm-up","3–5 min",null,null,"Raise core temp. Nasal breathing.",null),
+    M("90/90 hip switches",null,"2×6/side",null,null,"Hip IR/ER. Don't force end range.","90/90 hip switch mobility"),
+    M("Banded clamshells",null,"2×15/side",null,null,"Glute med prime. L-side first.","banded clamshell exercise"),
+    M("Adductor rockback",null,"2×8/side",null,null,"Gentle loaded adductor stretch — preps the bottom. Stop short of strain.","adductor rockback mobility","L-adductor"),
+    M("Copenhagen plank","short lever","2×20s/side","RPE 6",null,"Adductor resilience — carries into squat.","copenhagen plank short lever","L-adductor"),
+    M("Spanish squat","warm hold","1×30s","RPE 5",null,"Knee/tendon prime. Shallow if R-knee grumbles.","spanish squat isometric","R-knee"),
+    M("Bar ramp to top set",null,"as needed",null,null,"Progressive singles to the day's opener.",null),
+  ],
+  bench:[
+    M("Band pull-aparts",null,"2×15",null,null,"Rear delt / scap warm.","band pull apart"),
+    M("Prone Y-T-W",null,"2×6/letter",null,null,"Scap retractors + upward rotators.","prone ytw raises"),
+    M("Banded external rotation",null,"2×12/side",null,null,"Cuff. Own the range, don't crank.","banded external rotation shoulder"),
+    M("Serratus wall slide","foam roller","2×8",null,null,"Front-delt-protective scap patterning.","serratus wall slide","front-delt"),
+    M("Cable face pull","light","1×20",null,null,"Prime rear delts before pressing.","face pull cable"),
+    M("Landmine press","empty→light","2×8/side",null,null,"Groove the press on a scap-friendly ramp.","landmine press","front-delt"),
+  ],
+  sumo:[
+    M("Bike or row — easy","warm-up","3–5 min",null,null,"Raise core temp.",null),
+    M("90/90 + R-hip IR drill","R-focus","2×8/side",null,null,"Sumo lives on hip IR — prime it.","90/90 hip internal rotation"),
+    M("Adductor rockback",null,"2×8/side",null,null,"Preps the stretched sumo bottom. Stop short of strain.","adductor rockback mobility","L-adductor"),
+    M("Copenhagen plank","short lever","2×20s/side","RPE 6",null,"Adductor — direct sumo carryover.","copenhagen plank short lever","L-adductor"),
+    M("Sumo-stance BW squat","to depth","2×5",null,null,"Groove the stance. Gentle adductor loading.","sumo squat bodyweight"),
+    M("Banded glute bridge",null,"2×10",null,null,"Posterior prime, knees out.","banded glute bridge"),
+    M("Posterior knee desensitisation",null,"5 min",null,null,"Ongoing R-knee. Sub-threshold pressure, pain ≤3/10.","tennis ball self massage calf knee","R-knee"),
+    M("Sumo ramp to top set",null,"as needed",null,null,"Blocks early in the meso, floor once back + adductor are quiet.",null),
+  ],
+  upper:[
+    M("Band pull-aparts",null,"2×15",null,null,"Scap warm.","band pull apart"),
+    M("Prone Y-T-W",null,"2×6/letter",null,null,"Scap.","prone ytw raises"),
+    M("Banded external rotation",null,"2×12/side",null,null,"Cuff health.","banded external rotation shoulder"),
+    M("Cable face pull","light","1×20",null,null,"Rear delt prime.","face pull cable"),
+  ],
+};
+
+function _accItem(a, deload){
+  let sets = a.sets, nt = a.nt || "";
+  if (deload){ sets = Math.max(1, a.sets - 1); nt = (nt ? nt + " " : "") + "· deload: −1 set"; }
+  return { n:a.n, v:a.v, s:sets + "×" + a.reps, r:a.r, k:a.k || "—", nt, yt:a.yt, flag:a.flag };
+}
+function genMeso(sessions, labels){
+  return labels.map((label, wi) => {
+    const deload = (wi === labels.length - 1);
+    return {
+      id:"w" + (wi+1), jp:(wi+1) + "週", label, focus:"", note:null,
+      sessions: sessions.map(s => ({
+        id:s.id, jp:s.jp, name:s.name, focus:s.focus,
+        blocks:[
+          { t:WARM, items: (typeof s.wu === "string" ? WU[s.wu] : s.wu) },
+          { t:"Main", items: s.main.map(m => { const w = m.wk[wi]; return {n:m.n,v:m.v,s:w.s,r:w.r,k:w.k,nt:m.nt,yt:m.yt,flag:m.flag}; }) },
+          { t:"Accessories", items: s.acc.map(a => _accItem(a, deload)) }
+        ]
+      }))
+    };
+  });
+}
+
+/* ---------- MESO 2 — Power-Building Hypertrophy (sumo reintroduced) ---------- */
+const m2Sessions = [
+  { id:"lower-a", jp:"下A", name:"Lower A — Squat focus", focus:"Paused comp squat + spine-sparing leg volume", wu:"squat",
+    main:[
+      _mm("Competition squat","paused","paused squat","Comp stance. 2s pause — control through the L-adductor range.","L-adductor",
+        [_w("4×6","RPE 6","150"),_w("4×6","RPE 6-7","155"),_w("5×5","RPE 7","160"),_w("3×5","RPE 6","140")]),
+    ],
+    acc:[
+      _ac("Belt squat",3,12,"RPE 7-8","Leg volume, zero spinal load — ideal the day after pulling.","belt squat"),
+      _ac("Hack squat",3,10,"RPE 8","Quads through full range.","hack squat"),
+      _ac("Seated leg curl",3,12,"RPE 8","Hamstrings, full ROM.","seated leg curl"),
+      _ac("Reverse hyper",3,15,"RPE 7","Light–moderate, controlled (not ballistic). Posterior chain + decongests the lower back.","reverse hyper"),
+      _ac("Standing calf raise",3,15,"RPE 8","2s pause at top.","standing calf raise"),
+    ] },
+  { id:"upper-a", jp:"上A", name:"Upper A — Bench focus", focus:"Flat bench volume + rear-delt/back balance", wu:"bench",
+    main:[
+      _mm("Competition bench",null,"competition bench press","Shoulder blades pinned, controlled tempo.",null,
+        [_w("4×6","RPE 6","85"),_w("4×6","RPE 6-7","88"),_w("5×5","RPE 7","90"),_w("3×5","RPE 6","78")]),
+    ],
+    acc:[
+      _ac("Incline DB press",3,10,"RPE 8","Upper chest, full stretch at the bottom.","incline dumbbell press","front-delt"),
+      _ac("Chest-supported row",4,10,"RPE 8","Hold peak 1s. Rear delt + mid-trap.","chest supported row"),
+      _ac("Landmine press",3,8,"RPE 7","Front-delt-safe overhead-ish press.","landmine press","front-delt","/side"),
+      _ac("Lat pulldown",3,12,"RPE 8","Width.","lat pulldown"),
+      _ac("Cable lateral raise",3,15,"RPE 8","Side delts.","cable lateral raise"),
+      _ac("Cable triceps pushdown",3,15,"RPE 8","Pump.","cable triceps pushdown"),
+    ] },
+  { id:"lower-b", jp:"下B", name:"Lower B — Sumo pull", focus:"Sumo reintroduction (blocks → floor) + posterior size", wu:"sumo",
+    main:[
+      _mm("Sumo deadlift","blocks → floor","sumo deadlift","Reintroduce from 2in blocks (wk1) → 1in (wk2) → floor (wk3) only if back + adductor are quiet. Watch the L-adductor in the bottom.","L-adductor",
+        [_w("4×5","RPE 6","160 · 2in blocks"),_w("4×5","RPE 6-7","170 · 1in blocks"),_w("4×5","RPE 7","180 · floor"),_w("3×5","RPE 6","150")]),
+    ],
+    acc:[
+      _ac("Romanian deadlift",3,8,"RPE 7-8","Main posterior-chain size builder. Stance-agnostic.","romanian deadlift"),
+      _ac("Belt squat",3,12,"RPE 7","Leg volume without stacking spinal load.","belt squat"),
+      _ac("Nordic curl","(reverse-hyper station)",6,"RPE 8","Eccentric hamstring — assist with hands as needed.","nordic hamstring curl",undefined,"3"),
+      _ac("Seated cable row",3,12,"RPE 8","Upper back.","seated cable row"),
+      _ac("Cable crunch",3,12,"RPE 8","Trunk.","cable crunch"),
+    ] },
+  { id:"upper-b", jp:"上B", name:"Upper B — Volume", focus:"Paused bench + hypertrophy accessories", wu:"upper",
+    main:[
+      _mm("Paused bench",null,"paused bench press","Control off the chest.",null,
+        [_w("3×6","RPE 6","80"),_w("3×6","RPE 6-7","83"),_w("4×5","RPE 7","85"),_w("3×5","RPE 6","74")]),
+    ],
+    acc:[
+      _ac("Seated DB shoulder press",3,8,"RPE 7","Delts. Slight incline if front delt is irritable.","seated dumbbell shoulder press","front-delt"),
+      _ac("Dips (bodyweight)","optional",8,"RPE 7","Tolerance test ONLY if front delt is quiet. Stop above parallel. Skip on any complaint.","parallel bar dips","front-delt","2"),
+      _ac("Chest-supported row",3,12,"RPE 8","Mid-back.","chest supported row"),
+      _ac("Incline DB curl",3,12,"RPE 8","Biceps.","incline dumbbell curl"),
+      _ac("Cable lateral raise",3,15,"RPE 8","Delts.","cable lateral raise"),
+      _ac("Reverse hyper",2,15,"RPE 6","Light — back health.","reverse hyper"),
+    ] },
+];
+
+/* ---------- MESO 3 — Strength Reintroduction (sumo) ---------- */
+const m3Sessions = [
+  { id:"sq", jp:"スク", name:"Squat Day", focus:"Top double @7-8 + fatigue back-offs", wu:"squat",
+    main:[
+      _mm("Competition squat","top double + back-offs","competition squat","Top double, then triples at ~8% off. Full Valsalva now standard.",null,
+        [_w("1×2 + 4×3","RPE 7 · 8% drop","190"),_w("1×2 + 4×3","RPE 7-8","195"),_w("1×2 + 4×3","RPE 8","200"),_w("1×2 + 2×3","RPE 6-7","175")]),
+      _mm("Paused squat","secondary","paused squat","Eccentric ownership through the bottom.","L-adductor",
+        [_w("3×4","RPE 6-7","160"),_w("3×4","RPE 7","163"),_w("3×4","RPE 7-8","167"),_w("2×4","RPE 6","148")]),
+    ],
+    acc:[
+      _ac("Belt squat",3,12,"RPE 7-8","Leg volume, spine-sparing.","belt squat"),
+      _ac("Bulgarian split squat",3,8,"RPE 7","Unilateral, R-side check. Front foot forward — pain-free knee range.","bulgarian split squat","R-knee","/side"),
+      _ac("Seated leg curl",3,12,"RPE 8","Hamstrings.","seated leg curl"),
+      _ac("Reverse hyper",3,15,"RPE 7","Posterior + back decongestion, controlled.","reverse hyper"),
+    ] },
+  { id:"bp", jp:"ベン", name:"Bench Day", focus:"Top double + back-offs, secondary variations", wu:"bench",
+    main:[
+      _mm("Competition bench","top double + back-offs","competition bench press","Top double then triples at ~6% off.",null,
+        [_w("1×2 + 4×3","RPE 7 · 6% drop","105"),_w("1×2 + 4×3","RPE 7-8","108"),_w("1×2 + 4×3","RPE 8","110"),_w("1×2 + 2×3","RPE 6-7","98")]),
+      _mm("Close-grip bench","secondary","close grip bench press","Triceps + lockout.",null,
+        [_w("3×6","RPE 7","85"),_w("3×6","RPE 7","87"),_w("3×6","RPE 7-8","90"),_w("2×6","RPE 6","78")]),
+      _mm("Larsen press","block — feet up","larsen press bench","No leg drive — exposes stabilisers, removes the L-leg-drive asymmetry. Run in 3-4wk blocks.",null,
+        [_w("3×6","RPE 6-7","75"),_w("3×6","RPE 7","77"),_w("3×6","RPE 7","80"),_w("2×6","RPE 6","68")]),
+    ],
+    acc:[
+      _ac("Chest-supported row",4,10,"RPE 8","Back volume.","chest supported row"),
+      _ac("Landmine press",3,8,"RPE 7","Front-delt-safe.","landmine press","front-delt","/side"),
+      _ac("Cable lateral raise",3,15,"RPE 8","Delts.","cable lateral raise"),
+      _ac("Cable triceps pushdown",3,15,"RPE 8","Triceps.","cable triceps pushdown"),
+    ] },
+  { id:"dl", jp:"デッ", name:"Deadlift Day — Sumo", focus:"Heavy sumo double + deficit work (lowest CV-risk frequency)", wu:"sumo",
+    main:[
+      _mm("Competition sumo","top double + back-offs","sumo deadlift","Top double then triples at ~8% off. Once/week heavy. Watch the adductor in the bottom.","L-adductor",
+        [_w("1×2 + 3×3","RPE 7 · 8% drop","200"),_w("1×2 + 3×3","RPE 7-8","210"),_w("1×2 + 3×3","RPE 8","220"),_w("1×2 + 2×3","RPE 6-7","185")]),
+      _mm("Deficit sumo","2–3cm deficit","deficit sumo deadlift","Builds the off-floor position — the usual sumo sticking point. Small deficit only, protects the back.","L-adductor",
+        [_w("3×3","RPE 6-7","180"),_w("3×3","RPE 7","185"),_w("3×3","RPE 7","190"),_w("2×3","RPE 6","165")]),
+    ],
+    acc:[
+      _ac("Front squat",3,6,"RPE 7","Quad + torso. Swap to belt squat if the back's had enough.","front squat"),
+      _ac("Romanian deadlift",3,8,"RPE 7","Posterior-chain size.","romanian deadlift"),
+      _ac("Nordic curl",3,6,"RPE 8","Eccentric hamstring.","nordic hamstring curl"),
+      _ac("Reverse hyper",3,12,"RPE 7","Back health, controlled.","reverse hyper"),
+    ] },
+  { id:"up", jp:"上体", name:"Upper Accessory", focus:"Pressing + pulling volume, structural balance", wu:"upper",
+    main:[
+      _mm("Incline bench",null,"incline bench press","Upper-chest strength.",null,
+        [_w("4×8","RPE 7","80"),_w("4×8","RPE 7","82"),_w("4×8","RPE 7-8","85"),_w("3×8","RPE 6","72")]),
+      _mm("Pull-ups","or lat pulldown","pull ups","Vertical pull. Add load when 4×8 is easy.",null,
+        [_w("4×8","RPE 7","BW"),_w("4×8","RPE 7","BW+"),_w("4×8","RPE 7-8","BW+"),_w("3×8","RPE 6","BW")]),
+    ],
+    acc:[
+      _ac("Seated DB shoulder press",3,10,"RPE 7","Delts. Slight incline if front delt irritable.","seated dumbbell shoulder press","front-delt"),
+      _ac("Chest-supported row",3,12,"RPE 8","Mid-back.","chest supported row"),
+      _ac("Cable lateral raise",3,15,"RPE 8","Delts.","cable lateral raise"),
+      _ac("Incline DB curl",3,12,"RPE 8","Biceps.","incline dumbbell curl"),
+      _ac("Cable face pull",3,20,"RPE 7","Rear delt / structural.","face pull cable"),
+    ] },
+];
+
 const PROG = {
   meta:{lifter:"32y · 81kg class",total:"670kg",best:"250 / 140 / 280",dx:"Pericarditis (viral)",med:"Colchicine · 1-3mo"},
   mesos:[
@@ -353,23 +532,23 @@ const PROG = {
     {
       id:"m2",code:"M2",jp:"増量",name:"Power-Building Hypertrophy",sub:"Reclaim lost muscle mass",
       dates:"Weeks 5-8 · ~20 Jul",span:"4 wk",accent:"acc",
-      intent:"Bias size — strength returns faster than mass, so build the tissue first. JoeyFlexx-style high-frequency submaximal exposure to competition patterns. Comp squat returns paused; flat bench standard; conventional pull reintroduced. Likely overlaps the end of the colchicine course — mid-block brief Valsalva (1-2s) becomes available.",
-      goals:["Hypertrophy priority: 14-20 sets/muscle/week","Re-introduce competition lifts as technique primaries","Paused squats — control through L-adductor range","Introduce low-amplitude plyos (wk 7-8)","Maintain corrective work as Copenhagen 4-5×/wk"],
+      intent:"Bias size — strength returns faster than mass, so build the tissue first. JoeyFlexx-style high-frequency submaximal exposure to competition patterns. Comp squat returns paused; flat bench standard; sumo pull reintroduced off blocks then floor. Likely overlaps the end of the colchicine course — Valsalva builds toward full.",
+      goals:["Hypertrophy priority: 14-20 sets/muscle/week","Re-introduce competition lifts as technique primaries","Sumo reintroduced blocks→floor; adductor watched in the bottom","Paused squats — control through the L-adductor range","Belt squat + reverse hyper carry leg volume off the spine"],
       cardiac:"Cardio in normal zones, intervals fine. Full Valsalva building on heavy compounds (stress test clean to 180). Default exhale-on-exertion for lighter work. Watch resting HR & HRV trends; complete the colchicine course.",
-      caps:[["Top RPE","6-7"],["Valsalva","full, building"],["Plyo","low-amp wk7-8"],["Freq","4-5/wk"]],
-      targets:"End-of-meso ballpark (~60% of old): comp squat ~150×5 @7 · bench ~85×5 @7 · conv DL ~180×5 @7.",
-      weeks:repWeeks(m2w1,4,["Volume build","Volume build","Peak volume","Deload"])
+      caps:[["Top RPE","6-7"],["Valsalva","full, building"],["Plyo","low-amp wk7-8"],["Freq","4/wk"]],
+      targets:"End-of-meso ballpark (~60% of old): comp squat ~150×5 @7 · bench ~85×5 @7 · sumo ~180×5 @7 (you've pulled 280 sumo before — this is a base, not a ceiling).",
+      weeks:genMeso(m2Sessions,["Volume build","Volume build+","Peak volume","Deload"])
     },
     {
       id:"m3",code:"M3",jp:"筋力",name:"Strength Reintroduction",sub:"Translate tissue into strength",
       dates:"Weeks 9-12 · ~17 Aug",span:"4 wk",accent:"acc",
-      intent:"First block that looks like a real powerlifting programme. Classic split — squat / bench / deadlift / upper. Full RTS template: top single or double at RPE 7-8 then fatigue-percent back-offs. JoeyFlexx-style secondary variations (paused squat, deficit pulls) for volume without redundant stress. Conditional on clean fitness test + colchicine course complete.",
-      goals:["RTS fatigue-% back-offs drive volume","Top sets RPE 7-8 — earned, not scheduled","Variation work targets weak points (paused, deficit)","Deadlift kept low-frequency (highest CV cost)","Corrective drops to maintenance dose"],
+      intent:"First block that looks like a real powerlifting programme. Classic split — squat / bench / sumo deadlift / upper. Full RTS template: top single or double at RPE 7-8 then fatigue-percent back-offs. Secondary variations target weak points — paused squat, deficit sumo, Larsen press. Conditional on clean fitness test + colchicine course complete.",
+      goals:["RTS fatigue-% back-offs drive volume","Top sets RPE 7-8 — earned, not scheduled","Sumo variations: deficit sumo builds the off-floor sticking point","Deadlift kept low-frequency (highest CV cost)","Larsen press blocks in on bench day"],
       cardiac:"Full Valsalva standard on heavy compounds (stress test clean). Deadlift is still the most CV-taxing lift — once/week heavy by choice, not by restriction. 4×4 intervals fine. Keep logging readiness.",
       caps:[["Top RPE","7-8"],["Valsalva","full"],["Cardio","2/wk + intervals"],["Freq","4/wk"]],
-      targets:"End-of-meso ceilings (~75-80%): squat ~190-200 · bench ~105 · deadlift ~210-225. Hitting them = system responding.",
+      targets:"End-of-meso ceilings (~75-80%): squat ~190-200 · bench ~105 · sumo ~220. Given your sumo history (280, ~290 conv), these should come back briskly — but let RPE, not ego, set the load.",
       gate:"GATE — mostly cleared: fitness test ✓ (clean to 180 bpm), Mesos 1-2 asymptomatic. Remaining condition: finish the colchicine course (or be in its final stretch with no symptom return) before this block's heavier work.",
-      weeks:repWeeks(m3w1,4,["Intro","Build","Overreach","Deload"])
+      weeks:genMeso(m3Sessions,["Intro","Build","Overreach","Deload"])
     },
     {
       id:"m4",code:"M4",jp:"発揮",name:"Strength Expression",sub:"Express strength at higher intensity",
@@ -378,7 +557,7 @@ const PROG = {
       goals:["RPE 8.5-9 top set once/week per lift","Strict fatigue-% back-offs","Variations narrow to competition lifts","Plyos shift to specific (box jumps, med-ball throws)","Corrective = pure maintenance"],
       cardiac:"Full Valsalva, no restriction — stress test clean to 180 bpm. CV adaptations baked in; cardio is maintenance only, recovery priority dominates. Still log readiness — a clean test is a snapshot, not a permanent pass.",
       caps:[["Top RPE","8.5-9"],["Valsalva","unrestricted"],["Cardio","maintenance"],["Freq","4/wk"]],
-      targets:"End-of-meso ballpark (~85%): squat ~212 · bench ~119 · deadlift ~238. Still deliberately shy of old maxes.",
+      targets:"End-of-meso ballpark (~85%): squat ~212 · bench ~119 · sumo ~238. Still deliberately shy of old maxes.",
       weeks:repWeeks(m4w1,4,["Build","Build+","Peak intensity","Deload"])
     },
     {
@@ -388,7 +567,7 @@ const PROG = {
       goals:["Fork A: taper, attempt selection, test 90-95% of old PRs","Fork B: RPE 9 singles, no max test, build the base","Default to Fork B unless everything is clean","Next macro (Q1 2027) is the real PR block"],
       cardiac:"Fork A requires cardiology endorsement of maximal effort. Any cardiac niggle across prior mesos → Fork B, no question.",
       caps:[["Fork A","peak + test"],["Fork B","consolidate"],["Default","Fork B"],["Next","Q1 2027 PR"]],
-      targets:"Fork A targets: squat ~225-240 · bench ~125-135 · deadlift ~250-270 (90-95% of old). Anything above is a bonus, not the plan.",
+      targets:"Fork A targets: squat ~225-240 · bench ~125-135 · sumo ~250-270 (90-95% of old). Your best pulls were 280 sumo & ~290 conv — so the deadlift ceiling here is conservative and there's genuine PR headroom in the next macro. Anything above is a bonus, not the plan.",
       weeks:repWeeks(m5w1,4,["Taper 1","Taper 2","Peak / Test wk","Recover"])
     },
   ],
