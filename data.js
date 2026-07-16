@@ -492,6 +492,70 @@ const m3Sessions = [
     ] },
 ];
 
+/* ---------- MESO 1.5 — Pivot / re-ramp (M1 intensity, varied stimulus, light sumo groove) ---------- */
+WU.fb = [
+  M("Bike or row — easy","warm-up","3–4 min",null,null,"Raise core temp. Nasal breathing.",null),
+  M("90/90 hip switches",null,"2×6/side",null,null,"Hip IR/ER. Don't force end range.","90/90 hip switch mobility"),
+  M("Banded clamshells",null,"2×12/side",null,null,"Glute med prime. L-side first.","banded clamshell exercise"),
+  M("Adductor rockback",null,"2×8/side",null,null,"Gentle loaded adductor stretch — preps the sumo bottom. Stop short of strain.","adductor rockback mobility","L-adductor"),
+  M("Copenhagen plank","short lever","2×20s/side","RPE 6",null,"Adductor resilience.","copenhagen plank short lever","L-adductor"),
+  M("Band pull-aparts",null,"2×15",null,null,"Scap / rear-delt prep for pressing.","band pull apart"),
+  M("Cable face pull","light","1×15",null,null,"Front-delt-protective rear-delt prime.","face pull cable","front-delt"),
+  M("Posterior knee desensitisation",null,"3–4 min",null,null,"Ongoing R-knee. Sub-threshold pressure, pain ≤3/10.","tennis ball self massage calf knee","R-knee"),
+];
+const m15 = {
+  a:{ id:"fb-a", jp:"全A", name:"Full Body A — Squat", focus:"SSB box squat + light sumo groove + upper", blocks:[
+    { t:WARM, items:WU.fb },
+    { t:"Main", items:[
+      M("SSB box squat",null,"3×6","RPE 6",null,"Controlled to a box above pain-free depth. Spread the floor, knees out.","safety bar box squat"),
+      M("Sumo deadlift","from 2in blocks","3×5","RPE 6",null,"LIGHT — grooving the new stance. Watch the L-adductor in the bottom.","sumo deadlift blocks","L-adductor"),
+    ]},
+    { t:"Accessories", items:[
+      M("Incline DB press",null,"3×8","RPE 6",null,"Front-delt-safe. Full stretch at the bottom.","incline dumbbell press","front-delt"),
+      M("Chest-supported row",null,"3×10","RPE 6",null,"Rear delt + mid-trap. Hold peak 1s.","chest supported row"),
+      M("Single-leg glute bridge","R only","2×10","RPE 6",null,"R-glute, asymmetry. Match L to compare.","single leg glute bridge"),
+    ]},
+  ]},
+  b:{ id:"fb-b", jp:"全B", name:"Full Body B — Hinge", focus:"RDL + belt squat + upper", blocks:[
+    { t:WARM, items:WU.fb },
+    { t:"Main", items:[
+      M("Romanian deadlift",null,"3×8","RPE 6",null,"Hinge, don't pull. Feel the hamstrings load.","romanian deadlift"),
+      M("Belt squat",null,"3×10","RPE 6",null,"Leg volume, zero spinal load.","belt squat"),
+    ]},
+    { t:"Accessories", items:[
+      M("Landmine press",null,"3×8/side","RPE 6",null,"Front-delt-safe pressing.","landmine press","front-delt"),
+      M("Lat pulldown",null,"3×10","RPE 6",null,"Width.","lat pulldown"),
+      M("Split squat","R-leg front","2×8/side","RPE 6",null,"Unilateral, R-side asymmetry. Pain-free knee range.","split squat slow eccentric","R-knee"),
+    ]},
+  ]},
+  c:{ id:"fb-c", jp:"全C", name:"Full Body C — Quad / unilateral", focus:"Hack + 2nd sumo exposure + upper (added wk2)", blocks:[
+    { t:WARM, items:WU.fb },
+    { t:"Main", items:[
+      M("Hack squat",null,"3×10","RPE 6",null,"Quads through range.","hack squat"),
+      M("Sumo deadlift","from 2in blocks","3×5","RPE 6",null,"Second light sumo exposure this week — stance practice.","sumo deadlift blocks","L-adductor"),
+    ]},
+    { t:"Accessories", items:[
+      M("Seated DB shoulder press",null,"3×8","RPE 6",null,"Delts. Slight incline if front delt is irritable.","seated dumbbell shoulder press","front-delt"),
+      M("Seated cable row",null,"3×12","RPE 6",null,"Upper back.","seated cable row"),
+      M("Nordic curl","assisted","3×6","RPE 6-7",null,"Eccentric hamstring — assist with hands as needed.","nordic hamstring curl"),
+      M("Reverse hyper",null,"2×15","RPE 6",null,"Light — posterior chain + back health, controlled.","reverse hyper"),
+    ]},
+  ]},
+  d:{ id:"fb-d", jp:"全D", name:"Full Body D — Skill / speed", focus:"Belt squat + speed sumo + upper (added wk4)", blocks:[
+    { t:WARM, items:WU.fb },
+    { t:"Main", items:[
+      M("Belt squat",null,"3×10","RPE 6",null,"Leg volume, spine-sparing.","belt squat"),
+      M("Sumo deadlift","from blocks — speed","4×3","RPE 6",null,"Speed reps, not effort — bar-speed focus. Grooves the pull.","sumo deadlift speed"),
+    ]},
+    { t:"Accessories", items:[
+      M("Incline DB press",null,"3×10","RPE 6",null,"Front-delt-safe.","incline dumbbell press","front-delt"),
+      M("Chest-supported row",null,"3×12","RPE 6",null,"Mid-back volume.","chest supported row"),
+      M("Cable lateral raise",null,"3×15","RPE 6",null,"Side delts.","cable lateral raise"),
+      M("Cable face pull",null,"2×20","RPE 6",null,"Rear delt / structural.","face pull cable"),
+    ]},
+  ]},
+};
+
 const PROG = {
   meta:{lifter:"32y · 81kg class",total:"670kg",best:"250 / 140 / 280",dx:"Pericarditis (viral)",med:"Colchicine · 1-3mo"},
   mesos:[
@@ -515,7 +579,7 @@ const PROG = {
     },
     {
       id:"m1",code:"M1",jp:"再建",name:"Reconditioning & Reintegration",sub:"Loaded movement at tissue tolerance",
-      dates:"Weeks 1-4 · ~22 Jun",span:"4 wk",accent:"acc",
+      dates:"Weeks 1-4 · ~15 Jun",span:"4 wk",accent:"acc",
       intent:"Reintroduce loaded movement at submaximal intensities. Bias unilateral work for the R-side deficit. Joint-friendly selection throughout: box/SSB squats above pain-free depth, trap-bar and block pulls (no floor yet), landmine and incline pressing for the front delt. Success = completed asymptomatic with rising readiness, not weight on the bar.",
       goals:["Restore work capacity & movement quality under load","Keep pulling OFF the floor (protect lower back)","Front-delt-safe pressing progression (landmine → incline → flat)","Continue tendon prep from Meso 0","Close L/R asymmetry with unilateral bias"],
       cardiac:"HR cap removed after the clean stress test — cardio in normal zones. Brief Valsalva (1-2s at the sticking point) now cleared; default exhale-on-exertion for lighter/accessory work. Keep logging readiness; finish the colchicine course.",
@@ -530,8 +594,23 @@ const PROG = {
       })()
     },
     {
+      id:"m15",code:"M1.5",jp:"転換",name:"Pivot / Re-ramp",sub:"4-week bridge — re-ramp frequency, vary stimulus",
+      dates:"Weeks 5-8 · 13 Jul",span:"4 wk",accent:"acc",
+      intent:"A four-week bridge at M1 intensity (RPE 6 throughout) that re-ramps training frequency 2 → 3 → 3 → 4 and varies the stimulus. Full-body days with rotating emphasis (squat / hinge / quad-unilateral / skill). The competition sumo is introduced here from blocks at light, technical loads, so the new stance is grooved before M2 loads it. Joint-friendly selection continues — SSB/box squats, belt squat, landmine and incline pressing, off-floor pulls — with corrective work threaded into every warm-up.",
+      goals:["Re-ramp frequency 2→3→3→4 without adding intensity","Vary the stimulus vs M1 (fresh movement mix)","Groove sumo from blocks at RPE 6 before M2 loads it","Keep front-delt-safe pressing + off-floor pulling","Maintain adductor / knee / hip corrective work"],
+      cardiac:"HR caps lifted (stress test clean to 180). At RPE 6 it's mostly exhale-on-exertion; brief Valsalva is fine on the heavier sets. Keep logging readiness and finish the colchicine course.",
+      caps:[["Top RPE","6"],["Freq","2→3→3→4"],["Valsalva","brief"],["Stimulus","varied FB"]],
+      targets:"No load targets — this block re-ramps frequency and varies stimulus at M1 intensity. Sumo stays light from blocks (RPE 6), grooving the stance for M2.",
+      weeks:[
+        {id:"w1",jp:"1週",label:"Re-entry · 2 days",focus:"",sessions:[m15.a,m15.b],note:null},
+        {id:"w2",jp:"2週",label:"Add frequency · 3 days",focus:"",sessions:[m15.a,m15.b,m15.c],note:"Session C joins — third day added. RPE 6 held."},
+        {id:"w3",jp:"3週",label:"Consolidate · 3 days",focus:"",sessions:[m15.a,m15.b,m15.c],note:"Same three sessions, progressed: +1 rep or a small load bump, RPE 6 held."},
+        {id:"w4",jp:"4週",label:"Four days",focus:"",sessions:[m15.a,m15.b,m15.c,m15.d],note:"Session D (skill/speed) joins — four days. Still RPE 6. This rhythm bridges into M2's split."}
+      ]
+    },
+    {
       id:"m2",code:"M2",jp:"増量",name:"Power-Building Hypertrophy",sub:"Reclaim lost muscle mass",
-      dates:"Weeks 5-8 · ~20 Jul",span:"4 wk",accent:"acc",
+      dates:"Weeks 9-12 · ~10 Aug",span:"4 wk",accent:"acc",
       intent:"Bias size — strength returns faster than mass, so build the tissue first. JoeyFlexx-style high-frequency submaximal exposure to competition patterns. Comp squat returns paused; flat bench standard; sumo pull reintroduced off blocks then floor. Likely overlaps the end of the colchicine course — Valsalva builds toward full.",
       goals:["Hypertrophy priority: 14-20 sets/muscle/week","Re-introduce competition lifts as technique primaries","Sumo reintroduced blocks→floor; adductor watched in the bottom","Paused squats — control through the L-adductor range","Belt squat + reverse hyper carry leg volume off the spine"],
       cardiac:"Cardio in normal zones, intervals fine. Full Valsalva building on heavy compounds (stress test clean to 180). Default exhale-on-exertion for lighter work. Watch resting HR & HRV trends; complete the colchicine course.",
@@ -541,7 +620,7 @@ const PROG = {
     },
     {
       id:"m3",code:"M3",jp:"筋力",name:"Strength Reintroduction",sub:"Translate tissue into strength",
-      dates:"Weeks 9-12 · ~17 Aug",span:"4 wk",accent:"acc",
+      dates:"Weeks 13-16 · ~7 Sep",span:"4 wk",accent:"acc",
       intent:"First block that looks like a real powerlifting programme. Classic split — squat / bench / sumo deadlift / upper. Full RTS template: top single or double at RPE 7-8 then fatigue-percent back-offs. Secondary variations target weak points — paused squat, deficit sumo, Larsen press. Conditional on clean fitness test + colchicine course complete.",
       goals:["RTS fatigue-% back-offs drive volume","Top sets RPE 7-8 — earned, not scheduled","Sumo variations: deficit sumo builds the off-floor sticking point","Deadlift kept low-frequency (highest CV cost)","Larsen press blocks in on bench day"],
       cardiac:"Full Valsalva standard on heavy compounds (stress test clean). Deadlift is still the most CV-taxing lift — once/week heavy by choice, not by restriction. 4×4 intervals fine. Keep logging readiness.",
@@ -552,7 +631,7 @@ const PROG = {
     },
     {
       id:"m4",code:"M4",jp:"発揮",name:"Strength Expression",sub:"Express strength at higher intensity",
-      dates:"Weeks 13-16 · ~14 Sep",span:"4 wk",accent:"acc",
+      dates:"Weeks 17-20 · ~5 Oct",span:"4 wk",accent:"acc",
       intent:"Mature RTS in full form. RPE 9 available on planned top sets once/week per lift; other sessions RPE 7-8. Specificity rises, variations narrow toward competition lifts. Squat and bench to 2×/week, deadlift stays 1× heavy.",
       goals:["RPE 8.5-9 top set once/week per lift","Strict fatigue-% back-offs","Variations narrow to competition lifts","Plyos shift to specific (box jumps, med-ball throws)","Corrective = pure maintenance"],
       cardiac:"Full Valsalva, no restriction — stress test clean to 180 bpm. CV adaptations baked in; cardio is maintenance only, recovery priority dominates. Still log readiness — a clean test is a snapshot, not a permanent pass.",
@@ -562,7 +641,7 @@ const PROG = {
     },
     {
       id:"m5",code:"M5",jp:"頂点",name:"Peak / Consolidation",sub:"Two forks — choose at end of M4",
-      dates:"Weeks 17-20 · ~12 Oct",span:"4 wk",accent:"warn",
+      dates:"Weeks 21-24 · ~2 Nov",span:"4 wk",accent:"warn",
       intent:"Forks on the picture at week 16. Fork A (Peak/Test): 3-week taper into a mock/sanctioned meet, only if fully cleared, fully asymptomatic, fitness test clean, colchicine done 4-6 wks prior. Fork B (Consolidation): continue M4 logic to RPE 9 singles ~87-92% without a true 1RM test — sets up a real PR-chase macro in Dec 2026-Mar 2027.",
       goals:["Fork A: taper, attempt selection, test 90-95% of old PRs","Fork B: RPE 9 singles, no max test, build the base","Default to Fork B unless everything is clean","Next macro (Q1 2027) is the real PR block"],
       cardiac:"Fork A requires cardiology endorsement of maximal effort. Any cardiac niggle across prior mesos → Fork B, no question.",
