@@ -27,6 +27,20 @@
         <div class="goal-lab accent">The fix</div>
         <ul class="blist">${g.fix.map(f => `<li>${f}</li>`).join('')}</ul>
       </div>
+      ${g.protocol ? `
+      <div class="goal-sec">
+        <div class="goal-lab accent">Progression — tracked · advance on criteria</div>
+        ${g.protocol.stages.map(st => `
+          <div style="margin-top:12px">
+            <div style="font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink)">${st.n}</div>
+            <ul class="blist" style="margin-top:6px">${st.items.map(i => `<li>${i}</li>`).join('')}</ul>
+            <div style="font-size:12px;color:var(--ink-faint);margin-top:5px"><b style="color:var(--ink-dim)">Advance when:</b> ${st.advance}</div>
+          </div>`).join('')}
+      </div>
+      ${ui.callout('acc', '✓', '<b>Completion criterion:</b> ' + g.protocol.completion)}
+      <div class="goal-tx" style="margin-top:8px;font-size:12.5px">${g.protocol.cadence}</div>
+      ` : ''}
+      ${g.redflags ? ui.callout('danger', '⚠', '<b>Stop, or get it assessed, if:</b><ul style="margin:7px 0 0;padding-left:16px;display:flex;flex-direction:column;gap:5px">' + g.redflags.map(r => `<li>${r}</li>`).join('') + '</ul>') : ''}
       ${ui.callout('teal', '⏱', g.time)}
     </div>`).join('');
 
