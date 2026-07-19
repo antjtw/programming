@@ -596,23 +596,22 @@ const PROG = {
       })()
     },
     {
-      id:"m15",code:"M1.5",jp:"転換",name:"Pivot / Re-ramp",sub:"4-week bridge — re-ramp frequency, vary stimulus",
-      dates:"Weeks 5-8 · 13 Jul",span:"4 wk",accent:"acc",
-      intent:"A four-week bridge at M1 intensity (RPE 6 throughout) that re-ramps training frequency 2 → 3 → 3 → 4 and varies the stimulus. Full-body days with rotating emphasis (squat / hinge / quad-unilateral / skill). Two jobs beyond frequency: groove the competition sumo from blocks at light technical loads, and start rebuilding a wide, upright, stacked squat — prioritised ankle dorsiflexion plus SSB/tempo/heel-elevated wide squatting to earn forward knee travel. Joint-friendly throughout, corrective work threaded into every warm-up.",
-      goals:["Re-ramp frequency 2→3→3→4 without adding intensity","Rebuild the wide, upright, stacked squat — dorsiflexion + tempo/heel-elevated pattern work; retire the 'knees out' cue","Groove sumo from blocks at RPE 6 before M2 loads it","Keep front-delt-safe pressing + off-floor pulling","Maintain adductor / knee / hip corrective work"],
+      id:"m15",code:"M1.5",jp:"転換",name:"Pivot / Re-ramp",sub:"3-week bridge — re-ramp frequency, vary stimulus",
+      dates:"Weeks 5-7 · 20 Jul",span:"3 wk",accent:"acc",
+      intent:"A three-week bridge at M1 intensity (RPE 6 throughout) that re-ramps training frequency 2 → 3 → 4 and varies the stimulus. Full-body days with rotating emphasis (squat / hinge / quad-unilateral / skill). Two jobs beyond frequency: groove the competition sumo from blocks at light technical loads, and start rebuilding a wide, upright, stacked squat — prioritised ankle dorsiflexion plus SSB/tempo/heel-elevated wide squatting to earn forward knee travel. Joint-friendly throughout, corrective work threaded into every warm-up.",
+      goals:["Re-ramp frequency 2→3→4 without adding intensity","Rebuild the wide, upright, stacked squat — dorsiflexion + tempo/heel-elevated pattern work; retire the 'knees out' cue","Groove sumo from blocks at RPE 6 before M2 loads it","Keep front-delt-safe pressing + off-floor pulling","Maintain adductor / knee / hip corrective work"],
       cardiac:"HR caps lifted (stress test clean to 180). At RPE 6 it's mostly exhale-on-exertion; brief Valsalva is fine on the heavier sets. Keep logging readiness and finish the colchicine course.",
-      caps:[["Top RPE","6"],["Freq","2→3→3→4"],["Valsalva","brief"],["Stimulus","varied FB"]],
+      caps:[["Top RPE","6"],["Freq","2→3→4"],["Valsalva","brief"],["Stimulus","varied FB"]],
       targets:"No load targets — this block re-ramps frequency and varies stimulus at M1 intensity. Sumo stays light from blocks (RPE 6), grooving the stance for M2.",
       weeks:[
         {id:"w1",jp:"1週",label:"Re-entry · 2 days",focus:"",sessions:[m15.a,m15.b],note:null},
         {id:"w2",jp:"2週",label:"Add frequency · 3 days",focus:"",sessions:[m15.a,m15.b,m15.c],note:"Session C joins — third day added. RPE 6 held."},
-        {id:"w3",jp:"3週",label:"Consolidate · 3 days",focus:"",sessions:[m15.a,m15.b,m15.c],note:"Same three sessions, progressed: +1 rep or a small load bump, RPE 6 held."},
-        {id:"w4",jp:"4週",label:"Four days",focus:"",sessions:[m15.a,m15.b,m15.c,m15.d],note:"Session D (skill/speed) joins — four days. Still RPE 6. This rhythm bridges into M2's split."}
+        {id:"w3",jp:"3週",label:"Four days",focus:"",sessions:[m15.a,m15.b,m15.c,m15.d],note:"Session D (skill/speed) joins — four days. Still RPE 6. This rhythm bridges straight into M2's split."}
       ]
     },
     {
       id:"m2",code:"M2",jp:"増量",name:"Power-Building Hypertrophy",sub:"Reclaim lost muscle mass",
-      dates:"Weeks 9-12 · ~10 Aug",span:"4 wk",accent:"acc",
+      dates:"Weeks 8-11 · ~10 Aug",span:"4 wk",accent:"acc",
       intent:"Bias size — strength returns faster than mass, so build the tissue first. JoeyFlexx-style high-frequency submaximal exposure to competition patterns. Comp squat returns paused; flat bench standard; sumo pull reintroduced off blocks then floor. Likely overlaps the end of the colchicine course — Valsalva builds toward full.",
       goals:["Hypertrophy priority: 14-20 sets/muscle/week","Re-introduce competition lifts as technique primaries","Sumo reintroduced blocks→floor; adductor watched in the bottom","Paused squats — control through the L-adductor range","Belt squat + reverse hyper carry leg volume off the spine"],
       cardiac:"Cardio in normal zones, intervals fine. Full Valsalva building on heavy compounds (stress test clean to 180). Default exhale-on-exertion for lighter work. Watch resting HR & HRV trends; complete the colchicine course.",
@@ -622,7 +621,7 @@ const PROG = {
     },
     {
       id:"m3",code:"M3",jp:"筋力",name:"Strength Reintroduction",sub:"Translate tissue into strength",
-      dates:"Weeks 13-16 · ~7 Sep",span:"4 wk",accent:"acc",
+      dates:"Weeks 12-15 · ~7 Sep",span:"4 wk",accent:"acc",
       intent:"First block that looks like a real powerlifting programme. Classic split — squat / bench / sumo deadlift / upper. Full RTS template: top single or double at RPE 7-8 then fatigue-percent back-offs. Secondary variations target weak points — paused squat, deficit sumo, Larsen press. Conditional on clean fitness test + colchicine course complete.",
       goals:["RTS fatigue-% back-offs drive volume","Top sets RPE 7-8 — earned, not scheduled","Sumo variations: deficit sumo builds the off-floor sticking point","Deadlift kept low-frequency (highest CV cost)","Larsen press blocks in on bench day"],
       cardiac:"Full Valsalva standard on heavy compounds (stress test clean). Deadlift is still the most CV-taxing lift — once/week heavy by choice, not by restriction. 4×4 intervals fine. Keep logging readiness.",
@@ -633,7 +632,7 @@ const PROG = {
     },
     {
       id:"m4",code:"M4",jp:"発揮",name:"Strength Expression",sub:"Express strength at higher intensity",
-      dates:"Weeks 17-20 · ~5 Oct",span:"4 wk",accent:"acc",
+      dates:"Weeks 16-19 · ~5 Oct",span:"4 wk",accent:"acc",
       intent:"Mature RTS in full form. RPE 9 available on planned top sets once/week per lift; other sessions RPE 7-8. Specificity rises, variations narrow toward competition lifts. Squat and bench to 2×/week, deadlift stays 1× heavy.",
       goals:["RPE 8.5-9 top set once/week per lift","Strict fatigue-% back-offs","Variations narrow to competition lifts","Plyos shift to specific (box jumps, med-ball throws)","Corrective = pure maintenance"],
       cardiac:"Full Valsalva, no restriction — stress test clean to 180 bpm. CV adaptations baked in; cardio is maintenance only, recovery priority dominates. Still log readiness — a clean test is a snapshot, not a permanent pass.",
@@ -643,7 +642,7 @@ const PROG = {
     },
     {
       id:"m5",code:"M5",jp:"頂点",name:"Peak / Consolidation",sub:"Two forks — choose at end of M4",
-      dates:"Weeks 21-24 · ~2 Nov",span:"4 wk",accent:"warn",
+      dates:"Weeks 20-23 · ~2 Nov",span:"4 wk",accent:"warn",
       intent:"Forks on the picture at week 16. Fork A (Peak/Test): 3-week taper into a mock/sanctioned meet, only if fully cleared, fully asymptomatic, fitness test clean, colchicine done 4-6 wks prior. Fork B (Consolidation): continue M4 logic to RPE 9 singles ~87-92% without a true 1RM test — sets up a real PR-chase macro in Dec 2026-Mar 2027.",
       goals:["Fork A: taper, attempt selection, test 90-95% of old PRs","Fork B: RPE 9 singles, no max test, build the base","Default to Fork B unless everything is clean","Next macro (Q1 2027) is the real PR block"],
       cardiac:"Fork A requires cardiology endorsement of maximal effort. Any cardiac niggle across prior mesos → Fork B, no question.",
